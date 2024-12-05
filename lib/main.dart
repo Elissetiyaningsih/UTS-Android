@@ -3,6 +3,7 @@ import 'package:aplikasi_pertamaku/manga_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
@@ -11,22 +12,47 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Builder(builder: (context) {
-        return Scaffold(
-          appBar: AppBar(
-            iconTheme: const IconThemeData(color: Colors.white),
-            backgroundColor:Colors.blue.shade400,
-            centerTitle: true,
-            title: const Text(
-              'About Me',
-              style: TextStyle(color: Colors.white),
+      theme: ThemeData(
+        textTheme: GoogleFonts.poppinsTextTheme(),
+        primarySwatch: Colors.blue,
+      ),
+      home: const AboutMeScreen(),
+    );
+  }
+}
+class AboutMeScreen extends StatelessWidget {
+  const AboutMeScreen({super.key});
+
+
+  @override
+ Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue, Color.fromARGB(255, 244, 243, 207)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
           ),
+        ),
+        title: Text(
+          '✨ About Me ✨',
+          style: GoogleFonts.poppins(
+            textStyle: const TextStyle(
+              color: Color.fromARGB(255, 3, 2, 12),
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        centerTitle: true,
+      ),
           endDrawer: Drawer(
             child: ListView(
               padding: EdgeInsets.zero,
@@ -43,17 +69,18 @@ class MyApp extends StatelessWidget {
                     child: ClipOval(
                       child: Image.asset(
                         fit: BoxFit.cover,
-                        'assets/logo.png',
+                        'assets/foto.jpg',
                         width: 90,
                       ),
                     ),
                   ),
                   decoration: const BoxDecoration(
-                      color: Colors.cyan,
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(
-                              'https://th.bing.com/th/id/OIP.qeMWmF3YwfMgnTzqLoYIlQHaEK?rs=1&pid=ImgDetMain'))),
+                   gradient: LinearGradient(
+                   colors: [Colors.blue, Color.fromARGB(255, 244, 243, 207)],
+                   begin: Alignment.topLeft,
+                   end: Alignment.bottomRight,
+            ),
+                  )
                 ),
                 ListTile(
                   leading: const Icon(Icons.home,color:Color.fromARGB(255, 15, 143, 223)),
@@ -63,8 +90,8 @@ class MyApp extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.movie, color:Color.fromARGB(255, 15, 143, 223)),
-                  title: const Text('Movie List'),
+                  leading: const Icon(Icons.theater_comedy, color:Color.fromARGB(255, 251, 213, 21)),
+                  title: const Text('Drama List'),
                   onTap: () {
                     Navigator.push(
                         context,
@@ -73,7 +100,7 @@ class MyApp extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(FontAwesomeIcons.whatsapp, color:Color.fromARGB(255, 15, 143, 223)),
+                  leading: const Icon(FontAwesomeIcons.whatsapp, color:Color(0xFF25D366)),
                   title: const Text('WhatsApp'),
                   onTap: () async {
                     final Uri url =
@@ -87,8 +114,22 @@ class MyApp extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(FontAwesomeIcons.instagram, color:Color.fromARGB(255, 15, 143, 223)),
+                  leading: const Icon(FontAwesomeIcons.instagram, color:Color(0xFF8134AF)),
                   title: const Text('Instagram'),
+                  onTap: () async {
+                    final Uri url =
+                        Uri.parse('https://insta.me/elissetiyaningsih_?text=Hello');
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(url,
+                          mode: LaunchMode.externalApplication);
+                    } else {
+                      throw 'Could not launch $url';
+                    }
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(FontAwesomeIcons.facebook, color:Color.fromARGB(255, 15, 91, 223)),
+                  title: const Text('Facebook'),
                   onTap: () async {
                     final Uri url =
                         Uri.parse('https://insta.me/elissetiyaningsih_?text=Hello');
@@ -148,11 +189,11 @@ class MyApp extends StatelessWidget {
                   height: 10,
                 ),
                 const Text(
-                  'University Student',
+                  'Informatics Engineering Student',
                   style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 16,
                       fontStyle: FontStyle.italic,
-                      color: Colors.grey),
+                      color: Color.fromARGB(255, 120, 119, 119)),
                 ),
                 const SizedBox(
                   height: 20,
@@ -165,8 +206,12 @@ class MyApp extends StatelessWidget {
                       padding: EdgeInsets.all(15),
                       width: 400,
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade200,
-                        borderRadius: BorderRadius.circular(10),
+                         gradient: LinearGradient(
+                          colors: [Color.fromARGB(255, 204, 215, 230), Color.fromARGB(255, 189, 227, 253)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          ),
+                        borderRadius: BorderRadius.circular(12),
                       ),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
@@ -174,9 +219,9 @@ class MyApp extends StatelessWidget {
                           AnimatedTextKit(
                             animatedTexts: [
                               TypewriterAnimatedText(
-                                "Hello There!\nI'm Elis Setiyaningsih I was born in Waelo 14 August 2004, I am a 5th-semester Student at ITB Stikom Ambon. Currently, I am learning about the flutter and exploring its capabilities. If you want to know more about me, you can contact me.",
+                                "Hello There👋✨\nMy name is Elis Setiyaningsih. I was born in Waelo on August 14, 2004, and I am currently a 5th-semester student at ITB Stikom Ambon. I am passionate about technology and am currently diving deeper into Flutter to explore its features and capabilities.\nIf you'd like to know more about me or discuss opportunities, feel free to contact me!",
                                 speed: const Duration(milliseconds: 60),
-                                textStyle: TextStyle(fontSize: 17, color: Colors.black),
+                                textStyle: TextStyle(fontSize: 16, color: Colors.black),
                                 textAlign: TextAlign.center,
                               )
                             ],
@@ -189,51 +234,18 @@ class MyApp extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.all(15),
-                width: 400,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                   const Text(
-                    "Contact Me:",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                       color: Color.fromARGB(255, 46, 46, 47),
-                    )
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        const Icon(Icons.email, color: Colors.blue),
-                        const SizedBox(width: 10),
-                        const Text("elissetiyaningsih@hotmail.com"),
-                      ]
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        const Icon(Icons.phone, color: Colors.green),
-                        const SizedBox(width: 10),
-                        const Text("+62 821 8850 2609"),
-                      ]
-                    )
-                  ],
-                ),
-              ),
-               const SizedBox(height: 15),
+              const SizedBox(height: 15),
+               const SizedBox(height: 20),
                Container(
                 padding: const EdgeInsets.all(15),
                 width: 400,
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(10),
+                   gradient: LinearGradient(
+                   colors:  [Color.fromARGB(255, 212, 229, 234), Color.fromARGB(255, 212, 229, 240)],
+                   begin: Alignment.topLeft,
+                   end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -241,25 +253,28 @@ class MyApp extends StatelessWidget {
                     Row(
                       children: [
                         const Text(
-                      "Skills and expertise I'm learning",
+                      "Skills I'm Developing 📚💻 ",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 49, 50, 50),
+                        color:  Color.fromARGB(255, 12, 25, 211),
                       )
                         )
                       ]
                     ),
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 25),
                     Wrap(
                       spacing: 10,
                       runSpacing: 10,
                       children: [
-                        _buildSkillChip("Php", Color.fromARGB(255, 113, 191, 254)),
-                        _buildSkillChip("html",  Color.fromARGB(255, 113, 191, 254)),
-                        _buildSkillChip("Python",  Color.fromARGB(255, 113, 191, 254)),
-                        _buildSkillChip("Javascript",  Color.fromARGB(255, 113, 191, 254)),
-                       ]
+                       _buildSkillChip("🐘 PHP", Color.fromARGB(255, 122, 180, 234)), 
+                       _buildSkillChip("🌐 HTML", Color.fromARGB(255, 239, 247, 100)), 
+                       _buildSkillChip("⚡ JavaScript", Color.fromARGB(255, 110, 172, 233)),
+                       _buildSkillChip("🐍 Python", Color.fromARGB(255, 216, 215, 128)), 
+                       _buildSkillChip("🎨 CSS", Color.fromARGB(255, 227, 240, 55)),
+                       _buildSkillChip("📱 flutter", Color.fromARGB(255, 46, 133, 204)),
+                      
+                   ]
                     )
                       ]
                        )
@@ -267,11 +282,9 @@ class MyApp extends StatelessWidget {
               ],
             )
             )
-          );
-      }),
-    );
+         );
+      }
   }
-}
 Widget _buildSkillChip(String label, Color backgroundColor) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -282,7 +295,7 @@ Widget _buildSkillChip(String label, Color backgroundColor) {
     child: Text(
       label,
       style: const TextStyle(
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: FontWeight.w500,
         color: Colors.black,
       ),
@@ -339,5 +352,3 @@ class _AnimatedLogoState extends State<AnimatedLogo>{
     );
   }
 }
- 
-
