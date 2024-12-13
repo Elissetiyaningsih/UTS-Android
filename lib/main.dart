@@ -1,13 +1,28 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:aplikasi_pertamaku/manga_screen.dart';
+import 'package:aplikasi_pertamaku/drama_screen.dart';
+import 'package:aplikasi_pertamaku/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MainApp());
+}
+
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      // animasi splash screen
+      home: SplashScreen(),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -22,6 +37,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const AboutMeScreen(),
     );
+
   }
 }
 class AboutMeScreen extends StatelessWidget {
@@ -90,13 +106,18 @@ class AboutMeScreen extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: const Icon(Icons.theater_comedy, color:Color.fromARGB(255, 251, 213, 21)),
+                  leading: const Icon(Icons.movie, color:Color.fromARGB(255, 41, 41, 39)),
                   title: const Text('Drama List'),
                   onTap: () {
                     Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const MangaScreen()));
+                        PageTransition(
+                            type: PageTransitionType.scale,
+                            alignment: Alignment.bottomCenter,
+                            childCurrent: this,
+                            duration: const Duration(milliseconds: 400),
+                            // reverseDuration: const Duration(milliseconds: 400),
+                            child: const DramaScreen()));
                   },
                 ),
                 ListTile(

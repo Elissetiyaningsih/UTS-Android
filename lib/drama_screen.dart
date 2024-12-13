@@ -1,54 +1,98 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 import 'dart:io';
 
-class MangaItem {
+class DramaItem {
   final String title;
   final double rating;
-  final String story;
+  final String description;
   final File image;
 
-  MangaItem({
+  DramaItem({
     required this.title,
     required this.rating,
-    required this.story,
+    required this.description,
     required this.image,
   });
 }
 
-class MangaScreen extends StatefulWidget {
-  const MangaScreen({super.key});
+class DramaScreen extends StatefulWidget {
+  const DramaScreen({super.key});
 
   @override
-  State<MangaScreen> createState() => _MangaScreenState();
+  State<DramaScreen> createState() => _DramaScreenState();
 }
 
-class _MangaScreenState extends State<MangaScreen> {
-  final List<MangaItem> mangaList = [];
+class _DramaScreenState extends State<DramaScreen> {
+  final List<DramaItem> dramaList = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pink.shade400,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text(
-          'Manga List',
-          style: TextStyle(color: Colors.white),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue, Color.fromARGB(255, 244, 243, 207)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
         ),
+        title: Text(
+          'Drama List 🎬 ',
+          style: GoogleFonts.poppins(
+            textStyle: const TextStyle(
+              color: Color.fromARGB(255, 3, 2, 12),
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        centerTitle: true,
         actions: [
           IconButton(
-            color: Colors.white,
+            color: const Color.fromARGB(255, 10, 9, 9),
             icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {},
+            onPressed: () {
+              // Animated snackbar
+              IconSnackBar.show(context,
+                  label: 'You are notified!', snackBarType: SnackBarType.success);
+            },
           )
         ],
       ),
-      body: mangaList.isEmpty
-          ? const Center(
-              child: Text(
-                'Belum ada manga yang ditambahkan',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
+      body: dramaList.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Lottie animation
+                  Lottie.asset(
+                    'assets/drama.json',
+                    width: 200,
+                    height: 200,
+                    fit: BoxFit.cover,
+                  ),
+                  // Animated text kit
+                  AnimatedTextKit(
+                    animatedTexts: [
+                      TyperAnimatedText(
+                        'No dramas added yet!',
+                        textStyle: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 17,
+                            fontStyle: FontStyle.italic),
+                        speed: const Duration(milliseconds: 60),
+                      ),
+                    ],
+                    totalRepeatCount: 1,
+                  ),
+                ],
               ),
             )
           : Padding(
@@ -60,9 +104,9 @@ class _MangaScreenState extends State<MangaScreen> {
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
                 ),
-                itemCount: mangaList.length,
+                itemCount: dramaList.length,
                 itemBuilder: (context, index) {
-                  final manga = mangaList[index];
+                  final drama = dramaList[index];
                   return Dismissible(
                     key: UniqueKey(),
                     direction: DismissDirection.up,
@@ -79,18 +123,18 @@ class _MangaScreenState extends State<MangaScreen> {
                     ),
                     onDismissed: (direction) {
                       setState(() {
-                        mangaList.removeAt(index);
+                        dramaList.removeAt(index);
                       });
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           backgroundColor: Colors.red,
-                          content: Text('${manga.title} telah dihapus'),
+                          content: Text('${drama.title} has been removed'),
                           action: SnackBarAction(
-                            label: 'BATAL',
+                            label: 'UNDO',
                             textColor: Colors.white,
                             onPressed: () {
                               setState(() {
-                                mangaList.insert(index, manga);
+                                dramaList.insert(index, drama);
                               });
                             },
                           ),
@@ -113,7 +157,7 @@ class _MangaScreenState extends State<MangaScreen> {
                                   top: Radius.circular(12),
                                 ),
                                 image: DecorationImage(
-                                  image: FileImage(manga.image),
+                                  image: FileImage(drama.image),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -127,7 +171,7 @@ class _MangaScreenState extends State<MangaScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    manga.title,
+                                    drama.title,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14,
@@ -144,7 +188,7 @@ class _MangaScreenState extends State<MangaScreen> {
                                         color: Colors.amber,
                                       ),
                                       Text(
-                                        ' ${manga.rating}',
+                                        ' ${drama.rating}',
                                         style: const TextStyle(fontSize: 12),
                                       ),
                                     ],
@@ -161,7 +205,7 @@ class _MangaScreenState extends State<MangaScreen> {
               ),
             ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _showAddMangaForm(),
+        onPressed: () => _showAddDramaForm(),
         backgroundColor: Colors.green.shade400,
         child: const Icon(
           Icons.add,
@@ -171,11 +215,11 @@ class _MangaScreenState extends State<MangaScreen> {
     );
   }
 
-  Future<void> _showAddMangaForm() async {
+  Future<void> _showAddDramaForm() async {
     final titleController = TextEditingController();
-    final storyController = TextEditingController();
+    final descriptionController = TextEditingController();
     File? selectedImage;
-    double ratingValue = 2.5; // nilai default rating
+    double ratingValue = 2.5;
 
     await showModalBottomSheet(
       context: context,
@@ -195,7 +239,7 @@ class _MangaScreenState extends State<MangaScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const Text(
-                      'Tambah Manga Baru',
+                      'Add New Drama',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -205,7 +249,7 @@ class _MangaScreenState extends State<MangaScreen> {
                     TextField(
                       controller: titleController,
                       decoration: const InputDecoration(
-                        labelText: 'Judul Manga',
+                        labelText: 'Drama Title',
                         border: OutlineInputBorder(),
                       ),
                     ),
@@ -228,7 +272,7 @@ class _MangaScreenState extends State<MangaScreen> {
                           value: ratingValue,
                           min: 0,
                           max: 5,
-                          divisions: 50, // untuk increment 0.1
+                          divisions: 50, // Increment by 0.1
                           label: ratingValue.toStringAsFixed(1),
                           onChanged: (value) {
                             setModalState(() {
@@ -240,9 +284,9 @@ class _MangaScreenState extends State<MangaScreen> {
                     ),
                     const SizedBox(height: 12),
                     TextField(
-                      controller: storyController,
+                      controller: descriptionController,
                       decoration: const InputDecoration(
-                        labelText: 'Cerita',
+                        labelText: 'Description',
                         border: OutlineInputBorder(),
                       ),
                       maxLines: 3,
@@ -264,9 +308,9 @@ class _MangaScreenState extends State<MangaScreen> {
                             }
                           },
                           icon: const Icon(Icons.camera_alt),
-                          label: const Text('Kamera'),
+                          label: const Text('Camera'),
                         ),
-                        const SizedBox(width: 10), // Spasi antara dua tombol
+                        const SizedBox(width: 10),
                         ElevatedButton.icon(
                           onPressed: () async {
                             final ImagePicker picker = ImagePicker();
@@ -280,7 +324,7 @@ class _MangaScreenState extends State<MangaScreen> {
                             }
                           },
                           icon: const Icon(Icons.photo_library),
-                          label: const Text('Galeri'),
+                          label: const Text('Gallery'),
                         ),
                       ],
                     ),
@@ -300,11 +344,11 @@ class _MangaScreenState extends State<MangaScreen> {
                         if (titleController.text.isNotEmpty &&
                             selectedImage != null) {
                           setState(() {
-                            mangaList.add(
-                              MangaItem(
+                            dramaList.add(
+                              DramaItem(
                                 title: titleController.text,
                                 rating: ratingValue,
-                                story: storyController.text,
+                                description: descriptionController.text,
                                 image: selectedImage!,
                               ),
                             );
@@ -312,7 +356,7 @@ class _MangaScreenState extends State<MangaScreen> {
                           Navigator.pop(context);
                         }
                       },
-                      child: const Text('Simpan'),
+                      child: const Text('Save'),
                     ),
                     const SizedBox(height: 16),
                   ],
